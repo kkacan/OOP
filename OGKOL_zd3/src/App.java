@@ -66,11 +66,9 @@ public class App {
 	
 	private static void UkupnoDana(Device device) {
 		
-		ArrayList<Integer> out= new ArrayList<Integer>();
 		int zbroj=0;
-		out=device.getOut();
-		
-		for (int item: out) {
+				
+		for (int item: device.getOut()) {
 			zbroj+=item;
 		}
 		if (device.serName!=null) {
@@ -81,11 +79,7 @@ public class App {
 		System.out.println("\n");
 	}
 	private static void DatumiOdrzavanja(Device device) {
-		
-		ArrayList<Date> ard= new ArrayList<Date>();
-		
-		ard=device.getArd();
-		
+
 		if (device.serName!=null) {
 			System.out.println("Maintance for server -----> "+device.getSerName());
 		} else {
@@ -94,7 +88,7 @@ public class App {
 		
 		SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 		
-		for (Date item: ard) {
+		for (Date item: device.getArd()) {
 			System.out.println(df.format(item));
 		}
 		
