@@ -12,7 +12,7 @@ public class Order {
 		
 	}
 	
-	public void CreateOrder(Customer cust, ArrayList<?> lista) {
+	public static void CreateOrder(Customer cust, ArrayList<?> lista) {
 		
 		ArrayList tempList;
 		   if (orders.containsKey(cust.getId())) {
@@ -38,13 +38,21 @@ public class Order {
 	public ArrayList<Customer> getArrCust(){
 		
 		
-		
 		return null;
 		
 	}
 	
-	public void CalcOrderPrice(ArrayList<?> lista) {
-		
+	public static void CalcOrderPrice(ArrayList<?> lista) {
+
+		int cijena=0;
+   	 
+   	 	for (int i=0; i<lista.size();i++) {
+   	 		Goggles g =(Goggles) lista.get(i);
+   	 		cijena+=g.getPrice();
+   	 	}
+   	 
+   	 	System.out.println("Order price:" + cijena);
+   	 	System.out.println("\n");
 	}
 	
 	

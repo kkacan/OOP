@@ -6,7 +6,7 @@ public class Println3D {
 		
 	}
 	
-	public void printGoggles(int broj_naocala, Customer cust) {
+	public static void printGoggles(int broj_naocala, Customer cust) {
 		
 		ArrayList<Goggles> lista = new ArrayList<Goggles>();
 		
@@ -17,8 +17,8 @@ public class Println3D {
 			lista.add(goggles);
 		}
 		
-		Order order =new Order();
-		order.CreateOrder(cust, lista);
+		
+		Order.CreateOrder(cust, lista);
 
 		/*int order_price=0;
 		for (Goggles item: lista) {
