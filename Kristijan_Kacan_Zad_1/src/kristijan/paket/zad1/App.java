@@ -1,7 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 
@@ -15,8 +15,8 @@ public class App {
 		ArrayList<String[]> red = new ArrayList<String[]>();
 		ArrayList<String> tvrtke= new ArrayList<String>();
 		ArrayList<Integer> artikala= new ArrayList<Integer>();
-		HashMap<String, Integer> ukupno= new HashMap<String,Integer>();
-		HashMap<String, Integer> ukupno_cijena= new HashMap<String,Integer>();
+		LinkedHashMap<String, Integer> ukupno= new LinkedHashMap<String,Integer>();
+		LinkedHashMap<String, Integer> ukupno_cijena= new LinkedHashMap<String,Integer>();
 		int [] cijene= {5,10,15};
 		
 		File file = new File("./prodaja.csv") ;
@@ -37,6 +37,7 @@ public class App {
 			int br_artikala=0;
 			String firma="";
 			int cijena=0;
+			
 			for (int j = 0; j < coDta[0].length; j++) {
 				if (j<1) {
 					tvrtke.add(coDta[i][j]);
@@ -50,13 +51,11 @@ public class App {
 			
 			if (ukupno.containsKey(firma)) {
 				br_artikala+=ukupno.get(firma);
-			}
-			if (ukupno_cijena.containsKey(firma)) {
 				cijena+=ukupno_cijena.get(firma);
 			}
+
 			ukupno.put(firma, br_artikala);
 			ukupno_cijena.put(firma, cijena);
-			
 		}
 
 		for (String kljuc: ukupno.keySet()) {
