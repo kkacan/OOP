@@ -52,7 +52,6 @@ public class App {
 				br_artikala+=ukupno.get(firma);
 			}
 			if (ukupno_cijena.containsKey(firma)) {
-				
 				cijena+=ukupno_cijena.get(firma);
 			}
 			ukupno.put(firma, br_artikala);
