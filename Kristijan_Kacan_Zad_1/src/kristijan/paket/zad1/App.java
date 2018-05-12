@@ -10,13 +10,11 @@ public class App {
 	static String[][] coDta = new String[16][];
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		ArrayList<String[]> red = new ArrayList<String[]>();
-		ArrayList<String> tvrtke= new ArrayList<String>();
-		ArrayList<Integer> artikala= new ArrayList<Integer>();
-		LinkedHashMap<String, Integer> ukupno= new LinkedHashMap<String,Integer>();
-		LinkedHashMap<String, Integer> ukupno_cijena= new LinkedHashMap<String,Integer>();
+		ArrayList<String> tvrtke= new ArrayList<>();
+		LinkedHashMap<String, Integer> ukupno= new LinkedHashMap<>();
+		LinkedHashMap<String, Integer> ukupno_cijena= new LinkedHashMap<>();
 		int [] cijene= {5,10,15};
 		
 		File file = new File("./prodaja.csv") ;
@@ -43,7 +41,6 @@ public class App {
 					tvrtke.add(coDta[i][j]);
 					firma=coDta[i][j];
 				} else {
-					artikala.add(Integer.parseInt(coDta[i][j]));
 					br_artikala+=Integer.parseInt(coDta[i][j]);
 					cijena+=Integer.parseInt(coDta[i][j])*cijene[j-1];
 				}
@@ -59,10 +56,11 @@ public class App {
 		}
 
 		for (String kljuc: ukupno.keySet()) {
-			System.out.println(kljuc+" "+"ukupno= "+ukupno.get(kljuc));
+			System.out.println(kljuc+" "+"ukupno artikala "+ukupno.get(kljuc));
 		}
+		System.out.println("\n");
 		for (String kljuc: ukupno_cijena.keySet()) {
-			System.out.println(kljuc+" "+"ukupna cijena= "+ukupno_cijena.get(kljuc)+"€");
+			System.out.println(kljuc+" "+"ukupna cijena "+ukupno_cijena.get(kljuc)+"€");
 		}
 
 	}
