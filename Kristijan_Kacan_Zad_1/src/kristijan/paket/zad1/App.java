@@ -12,7 +12,6 @@ public class App {
 	public static void main(String[] args) {
 		
 		ArrayList<String[]> red = new ArrayList<String[]>();
-		ArrayList<String> tvrtke= new ArrayList<>();
 		LinkedHashMap<String, Integer> ukupno= new LinkedHashMap<>();
 		LinkedHashMap<String, Integer> ukupno_cijena= new LinkedHashMap<>();
 		int [] cijene= {5,10,15};
@@ -38,7 +37,6 @@ public class App {
 			
 			for (int j = 0; j < coDta[0].length; j++) {
 				if (j<1) {
-					tvrtke.add(coDta[i][j]);
 					firma=coDta[i][j];
 				} else {
 					br_artikala+=Integer.parseInt(coDta[i][j]);
