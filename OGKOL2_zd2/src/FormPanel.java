@@ -108,6 +108,11 @@ public class FormPanel extends JPanel {
 		gbc.insets = new Insets(25, 0, 0, 0);
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
 		left.add(btnPlay, gbc);
+		
+		gbc.gridx = 0;
+		gbc.gridy = 3;
+		gbc.anchor = GridBagConstraints.LINE_END;
+		left.add(newGame, gbc);
 
 	}
 
@@ -154,10 +159,7 @@ public class FormPanel extends JPanel {
 		gbc.anchor = GridBagConstraints.LINE_START;
 		right.add(newPlyBtn, gbc);
 		
-		gbc.gridx = 1;
-		gbc.gridy = 3;
-		gbc.anchor = GridBagConstraints.LINE_START;
-		right.add(newGame, gbc);
+		
 
 	}
 
