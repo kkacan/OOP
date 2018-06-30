@@ -2,6 +2,14 @@ package model;
 
 import java.io.Serializable;
 
+
+/**
+ * Klasa koja predstavlja objekt tipa Nekretnina 
+ * koja implementira serijalizaciju zbog spremanja 
+ * u datoteku. Sadrži sve parametre nekretnine i njihove getterse i setterse.
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 public class Nekretnina implements Serializable{
 	
 	/**
@@ -16,7 +24,6 @@ public class Nekretnina implements Serializable{
 	private boolean ponuda;
 	private String imeStranke;
 	private int id;
-	//private static int cnt=1;
 	
 	public Nekretnina (int id, String vrstaNekretnine, String mjesto, String ulica, String cijena, String vrstaPonude, boolean ponuda, String imeStranke) {
 		
@@ -28,7 +35,6 @@ public class Nekretnina implements Serializable{
 		this.ponuda=ponuda;
 		this.imeStranke=imeStranke;
 		this.id=id;
-		//cnt++;
 		
 	}
 

@@ -2,6 +2,13 @@ package model;
 
 import java.io.Serializable;
 
+/**
+ * Klasa koja predstavlja objekt tipa Stranka 
+ * koja implementira serijalizaciju zbog spremanja 
+ * u datoteku. Sadrži sve parametre stranke i njihove getterse i setterse.
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 public class Stranka implements Serializable{
 
 	/**
@@ -13,8 +20,6 @@ public class Stranka implements Serializable{
 	private String tel;
 	private String email;
 	private int id;
-	//private static int cnt=1;
-
 	
 	public Stranka(int id, String imePrezime,String adresaStanovanja,String tel,String email) {
 		
@@ -23,7 +28,6 @@ public class Stranka implements Serializable{
 		this.tel=tel;
 		this.email=email;
 		this.id=id;
-		//cnt++;
 	}
 
 
@@ -75,17 +79,6 @@ public class Stranka implements Serializable{
 	public void setId(int id) {
 		this.id = id;
 	}
-
-
-/*	public static int getCnt() {
-		return cnt;
-	}
-
-
-	public static void setCnt(int cnt) {
-		Stranka.cnt = cnt;
-	}*/
-
 
 
 	

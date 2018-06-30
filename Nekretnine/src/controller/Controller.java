@@ -7,17 +7,31 @@ import model.Database;
 import model.Nekretnina;
 import model.Stranka;
 
+
+/**
+ * Kontroler komunicira s bazom podataka koja predstavlja skup
+ * objekata tipa Stranka i Nekretnina. 
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 public class Controller {
 
 	private Stranka stranka;
 	private Nekretnina nekretnina;
 	private Database dbs;
 	
-	
+	/**
+	 * Konstruktor kreira novu bazu podataka.
+	 */
 	public Controller() {
 		dbs = new Database();
 	}
 	
+	/**
+	 * Metoda kojom se dodaje novo kreiranu nekretninu u bazu i sprema sve nekretnine u datoteku.
+	 * @param lfe 
+	 * 			 objekt klase LeftFormEvent pomoæu kojeg primamo podatke iz lijeve forme
+	 */
 	public void addNekretninaData(LeftFormEvent lfe) {
 		
 		int id =getNekretninaId();
@@ -36,7 +50,32 @@ public class Controller {
 		dbs.saveNekretnineToFile();
 
 	}
-	
+	/**
+	 * Metoda kojom se editira nekretnina i sprema sve nekretnine u datoteku.
+	 * @param lfe 
+	 * 			 objekt klase LeftFormEvent pomoæu kojeg primamo podatke iz NekretninaDialog dialoga
+	 * @param index 
+	 *    		   indeks nekretnine u ArrayListi
+	 */
+	public void editNekretninaData(LeftFormEvent lfe, int index) {
+
+		String vrsta = lfe.getVrstaNekretnine();
+		String mjesto = lfe.getMjesto();
+		String ulica = lfe.getUlica();
+		String cijena =lfe.getCijena();
+		String vrstaPon = lfe.getVrstaPonude();
+		String imeStranke = lfe.getImeStranke();
+
+		dbs.izmjeniNekretninu(index, vrsta, mjesto, ulica, cijena, vrstaPon, imeStranke);
+		
+		dbs.saveNekretnineToFile();
+
+	}
+	/**
+	 * Metoda kojom se dodaje novo kreiranu stranku u bazu i sprema sve stranke u datoteku.
+	 * @param rfe 
+	 * 			 objekt klase RightFormEvent pomoæu kojeg primamo podatke iz desne forme
+	 */
 	public void addStrankeData(RightFormEvent rfe) {
 		
 		String ime = rfe.getIme();
@@ -52,33 +91,58 @@ public class Controller {
 		dbs.saveStrankeToFile();
 		
 	}
-
-	public void listAllCustomers() {
-
-		/*for (Stranka cst : dbs.getStranke()) {
-
-			System.out.println("///////////////////// Stranke //////////////////////");
-			//System.out.println(cst.getName() + " : " + cst.getCity() + " : " + cst.getMail());
-
-		}*/
+	/**
+	 * Metoda kojom se editira stranka i sprema sve stranke u datoteku.
+	 * @param rfe 
+	 * 			 objekt klase RightFormEvent pomoæu kojeg primamo podatke iz StrankaDialog dialoga
+	 * @param index 
+	 * 			   indeks stranke u ArrayListi
+	 */
+	public void editStrankaData(RightFormEvent rfe, int index) {
+		
+		String ime = rfe.getIme();
+		String adresa = rfe.getAdresa();
+		String tel = rfe.getTel();
+		String email = rfe.getEmail();
+		
+		dbs.izmjeniStranku(index, ime, adresa, tel, email);
+		
+		dbs.saveStrankeToFile();
+		
 	}
 
+	/**
+	 * Metoda kojom dohvaæamo cijelu bazu stranki.
+	 * @return referencu na bazu stranki
+	 */
 	public List<Stranka> getDataStranke() {
+		
 		dbs.readStrankeFromFile();
-		//System.out.println("Returning data from database :-)");
+
 		return dbs.getStranke();
 	}
+	/**
+	 * Metoda kojom dohvaæamo cijelu bazu nekretnina.
+	 * @return referencu na bazu nekretnina
+	 */
 	public List<Nekretnina> getDataNekretnine() {
+
 		dbs.readNekretnineFromFile();
-		//System.out.println("Returning data from database :-)");
+
 		return dbs.getNekretnine();
 	}
-	
+	/**
+	 * Metoda kojom uèitavamo objekte nekretnina i stranki iz datoteke.
+	 */
 	public void readDataFromFile() {
+		
 		dbs.readNekretnineFromFile();
 		dbs.readStrankeFromFile();
 	}
-	
+	/**
+	 * Metoda koja generira novi id nekretnine koji je za 1 veæi od trenutno najveæeg u bazi.
+	 * @return vraæa novi id nekretnine
+	 */
 	private int getNekretninaId() {
 		
 		int id=1;
@@ -91,6 +155,10 @@ public class Controller {
 		
 		return id;
 	}
+	/**
+	 * Metoda koja generira novi id stranke koji je za 1 veæi od trenutno najveæeg u bazi.
+	 * @return vraæa novi id stranke
+	 */
 	private int getStrankaId() {
 		
 		int id=1;
@@ -103,32 +171,22 @@ public class Controller {
 		
 		return id;
 	}
-	
-	/*public void saveDataToFile() {
-		dbs.saveNekretnineToFile();
-		dbs.saveStrankeToFile();
-	}*/
-	
-/*	public void refreshData(ArrayList<Stranka> stranke, ArrayList<Nekretnina> nekretnine) {
-		dbs.refreshData(stranke, nekretnine);
-	}*/
-	
-	
-	/*public void addBuy(RightFormEvent rfe) {
-		
-		//buy= new Buy(rfe.getDelivery(),rfe.getGcText(),rfe.isDecorativePack(),rfe.isGiftCard(),rfe.isNewLetter(),rfe.getPaymentMet(),rfe.getProducrCat());
-		//dbs.addCustomer(cst);
-		dbs.addBuy(buy);
-	}*/
-	/*public void listAllBuy() {
-		for (Customer ct : dbs.getAllCustomers()) {
-			System.out.println("//////////////Customer/////////////");
-			System.out.println(ct.getID()+":" +ct.getName()+":" +ct.getCity()+":" +ct.getMail());
-		}
-	}*/
-	
-		
-	
-	
+	/**
+	 * Metoda koja osvježava sve stranke u bazi.
+	 * @param stranke 
+	 * 				 ArrayList stranke
+	 */
+	public void refreshDataStranke(List<Stranka> stranke) {
+		dbs.refreshDataStranke(stranke);
+	}
+	/**
+	 * Metoda koja osvježava sve nekretnine u bazi.
+	 * @param nekretnine 
+	 * 					ArrayList nekretnine
+	 */
+	public void refreshDataNekretnine(List<Nekretnina> nekretnine) {
+		dbs.refreshDataNekretnine(nekretnine);
+	}
+
 
 }

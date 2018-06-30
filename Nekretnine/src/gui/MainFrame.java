@@ -6,11 +6,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.BorderFactory;
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -24,17 +21,19 @@ import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.table.TableRowSorter;
-
 import controller.Controller;
 import model.Nekretnina;
 import model.Stranka;
 
-
+/**
+ * Klasa koja sadrži sve grafièke elemente aplikacije (GUI).
+ * 
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 public class MainFrame extends JFrame {
 	
 	private FormPanel fPanel;
-	//private TableFrame tableFrame;
 	private Controller cntrl;
 	
 	private JTable tablePon;
@@ -46,12 +45,17 @@ public class MainFrame extends JFrame {
 	private JPanel tablePanelPon;
 	private JPanel tablePanelPot;
 	private JPanel tablePanelStr;
-	JTabbedPane tabbedPane;
+	private JTabbedPane tabbedPane;
+	private NekretninaDialog nekretninaDialog;
+	private StrankaDialog strankaDialog;
+	private MenuBar menuBar;
 	
 	private boolean ponuda=true;
-	
 
-	
+	/**
+	 * Konstruktor dodaje glavni panel, tablicu za prikaz podataka i meni.
+	 * Postavlja dimenzije glavnog ekrana i uèitava podatke.
+	 */
 	public MainFrame() {
 		super("Nekretnine");
 		setLayout(new BorderLayout());
@@ -59,17 +63,7 @@ public class MainFrame extends JFrame {
 		createCompMainFrame();
 		add(tabbedPane,BorderLayout.NORTH);
 		add(fPanel, BorderLayout.CENTER);
-				
-		
-		//add(tablePanel,BorderLayout.NORTH);
-		
-
-		//add(tableFrame, BorderLayout.CENTER);
-		//add(tlbar, BorderLayout.NORTH);
-		//tlbar.setToolBarListener(tListener);
-		//setJMenuBar(menuBar.getJMenuBar());
-		//menuBar.setMainFrame(MainFrame.this);
-		//menuBar.setMenuBarListener(mListener);
+		setJMenuBar(menuBar);
 		setSize(1000, 700);
 		Dimension mins = new Dimension(900, 650);
 		setMinimumSize(mins);
@@ -80,15 +74,16 @@ public class MainFrame extends JFrame {
 		
 	}
 	
+	/**
+	 * Metoda koja inicijalizira sve komponente glavnog ekrana i
+	 * postavlja sve listenere.
+	 */
 	private void createCompMainFrame() {
-
-		//txtPanel = new TextPanel();
-		//tlbar = new ToolBar();
 		
 		cntrl = new Controller();
 		fPanel = new FormPanel();
-		
-		//menuBar = new MenuBar();
+
+		menuBar = new MenuBar();
 
 		fPanel.updateStrankeCombo(cntrl.getDataStranke());
 		
@@ -99,14 +94,16 @@ public class MainFrame extends JFrame {
 		tableModelPot = new TableModelPotraznja();
 		tableModelStr = new TableModelStranke();
 		
-		//TableRowSorter sorter = new TableRowSorter<TableModelPonuda>(tableModelPon);
+		nekretninaDialog = new NekretninaDialog(this);
+		strankaDialog = new StrankaDialog(this);
+		
+		tableModelPon.setController(cntrl);
+		tableModelPot.setController(cntrl);
+		tableModelStr.setController(cntrl);
 		
 		tablePon = new JTable(tableModelPon);
 		tablePot = new JTable(tableModelPot);
 		tableStr = new JTable(tableModelStr);
-		
-		//tablePon.setRowSorter(sorter);
-
 		
 		tablePanelPon.setLayout(new BorderLayout());
 		tablePanelPon.add(new JScrollPane(tablePon,JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED), BorderLayout.CENTER);
@@ -135,20 +132,43 @@ public class MainFrame extends JFrame {
 					    	
 					    	case "Obriši nekretninu":
 					    		showDeletePonudaDialog();
-					    							    	
+					    		break;						    	
+					    	
+					      	case "Izmjeni nekretninu":
+					      		nekretninaDialog.setVisible(true);
+					      		int column = 0;
+					      		int row = tablePon.getSelectedRow();
+					      		int id = (int) tableModelPon.getValueAt(row, column);
+					      		nekretninaDialog.setDialogData(cntrl, id);
+					    		break;						    	
 					    	}
 
 					     }
 					};
 					
 					JMenuItem item;
+					JMenuItem item2;
 				    popup.add(item = new JMenuItem("Obriši nekretninu"));
+				    popup.add(item2 = new JMenuItem("Izmjeni nekretninu"));
 				    item.setHorizontalTextPosition(JMenuItem.RIGHT);
+				    item2.setHorizontalTextPosition(JMenuItem.RIGHT);
 				    item.addActionListener(menuListener);
+				    item2.addActionListener(menuListener);
 				    popup.setBorder(new BevelBorder(BevelBorder.RAISED));
 				    popup.setVisible(true);
 				    popup.show(e.getComponent(), e.getX(), e.getY());
 					
+				}
+				
+				if(SwingUtilities.isLeftMouseButton(e) == true){
+					
+					if (e.getClickCount() == 2 && tablePon.getSelectedRow() != -1) {
+						nekretninaDialog.setVisible(true);
+			      		int column = 0;
+			      		int row = tablePon.getSelectedRow();
+			      		int id = (int) tableModelPon.getValueAt(row, column);
+			      		nekretninaDialog.setDialogData(cntrl, id);
+			        }
 				}
 		    }
 
@@ -172,21 +192,44 @@ public class MainFrame extends JFrame {
 					    	
 					    	case "Obriši nekretninu":
 					    		showDeletePotraznjaDialog();
+					    		break;
 					    		
-					    	
+					    	case "Izmjeni nekretninu":
+					      		nekretninaDialog.setVisible(true);
+					      		int column = 0;
+					      		int row = tablePot.getSelectedRow();
+					      		int id = (int) tableModelPot.getValueAt(row, column);
+					      		nekretninaDialog.setDialogData(cntrl, id);
+					    		break;						    	
+					    						    	
 					    	}
 
 					     }
 					};
 					
 					JMenuItem item;
+					JMenuItem item2;
 				    popup.add(item = new JMenuItem("Obriši nekretninu"));
+				    popup.add(item2 = new JMenuItem("Izmjeni nekretninu"));
 				    item.setHorizontalTextPosition(JMenuItem.RIGHT);
+				    item2.setHorizontalTextPosition(JMenuItem.RIGHT);
 				    item.addActionListener(menuListener);
+				    item2.addActionListener(menuListener);
 				    popup.setBorder(new BevelBorder(BevelBorder.RAISED));
 				    popup.setVisible(true);
 				    popup.show(e.getComponent(), e.getX(), e.getY());
 					
+				}
+				
+				if(SwingUtilities.isLeftMouseButton(e) == true){
+					
+					if (e.getClickCount() == 2 && tablePot.getSelectedRow() != -1) {
+						nekretninaDialog.setVisible(true);
+			      		int column = 0;
+			      		int row = tablePot.getSelectedRow();
+			      		int id = (int) tableModelPot.getValueAt(row, column);
+			      		nekretninaDialog.setDialogData(cntrl, id);
+			        }
 				}
 		    }
 
@@ -210,20 +253,43 @@ public class MainFrame extends JFrame {
 					    	
 					    	case "Obriši stranku":
 					    		showDeleteStrankaDialog();
+					    		break;
 					    		
+					    	case "Izmjeni stranku":
+					    		strankaDialog.setVisible(true);
+					      		int column = 0;
+					      		int row = tableStr.getSelectedRow();
+					      		int id = (int) tableModelStr.getValueAt(row, column);
+					      		strankaDialog.setDialogData(cntrl, id);	
+					    		break;
 					    	}
 
 					     }
 					};
 					
 					JMenuItem item;
+					JMenuItem item2;
 				    popup.add(item = new JMenuItem("Obriši stranku"));
+				    popup.add(item2 = new JMenuItem("Izmjeni stranku"));
 				    item.setHorizontalTextPosition(JMenuItem.RIGHT);
+				    item2.setHorizontalTextPosition(JMenuItem.RIGHT);
 				    item.addActionListener(menuListener);
+				    item2.addActionListener(menuListener);
 				    popup.setBorder(new BevelBorder(BevelBorder.RAISED));
 				    popup.setVisible(true);
 				    popup.show(e.getComponent(), e.getX(), e.getY());
 					
+				}
+				
+				if(SwingUtilities.isLeftMouseButton(e) == true){
+					
+					if (e.getClickCount() == 2 && tableStr.getSelectedRow() != -1) {
+						strankaDialog.setVisible(true);
+			      		int column = 0;
+			      		int row = tableStr.getSelectedRow();
+			      		int id = (int) tableModelStr.getValueAt(row, column);
+			      		strankaDialog.setDialogData(cntrl, id);	
+			        }
 				}
 		    }
 
@@ -260,159 +326,95 @@ public class MainFrame extends JFrame {
 	            
 	        }
 	    });
-
-		//TableFrame tableFrame = new TableFrame();
-/*		tListener = new ToolBarListener() {
-
-			@Override
-			public void setTextFromFile(String text) {
-
-				txtPanel.writeText(text);
-
-			}
+	    
+	    nekretninaDialog.setDialogListener(new NekretninaDialogListener() {
 
 			@Override
-			public void clearAllText() {
-
-				txtPanel.clearTextArea();
-
-			}
-
-			@Override
-			public void listAllCustomers() {
-				cntrl.listAllCustomers();
-
-			}
-		};*/
-		
-		/*mListener = new MenuBarListener() {
-
-			@Override
-			public List<Customer> getCustomersData() {
+			public void nekretninaDialogEventOccured(LeftFormEvent ndev, int index) {
 				
-				return cntrl.getData();
+				cntrl.editNekretninaData(ndev, index);
+				setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
+				refreshTable();
+	    		
 			}
 
-			@Override
-			public void setTextFromFile(String text) {
-				
-				txtPanel.writeText(text);
-			}
 
-						
-				
 			
-			
-		};*/
+		});
+	    
+	    strankaDialog.setDialogListener(new StrankaDialogListener() {
 
+			@Override
+			public void strankaDialogEventOccured(RightFormEvent sdev, int index) {
+				
+				cntrl.editStrankaData(sdev, index);
+				setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
+				refreshTable();
+			}
+			
+		});
+
+
+	
 		fPanel.setFormListener(new FormListener() {
 
 			@Override
 			public void leftPanelEventOccured(LeftFormEvent lfe) {
 
-				/*String imeStranke = lfe.getImeStranke();
-				String vrsta = lfe.getVrstaNekretnine();
-				String mjesto = lfe.getMjesto();
-				String ulica = lfe.getUlica();
-				String cijena =lfe.getCijena();*/
-				
-				//int counter = lfe.getNumClicked();
-
-				//txtPanel.writeText(name + " : " + city + " : " + mail);
 				cntrl.addNekretninaData(lfe);
-
-				//if (counter == 1) {
-					
-					setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
-					//setVisible(true);
-					refreshTable();
-
-				/*} else {
-					
-					tableFrame.setTableData(cntrl.getData());
-					tableFrame.refreshTable();
-
-				}*/
+				setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
+				refreshTable();
 
 			}
 
 			@Override
 			public void rightPanelEventOccured(RightFormEvent rfe) {
 				
-				/*String ime = rfe.getIme();
-				String adresa = rfe.getAdresa();
-				String tel = rfe.getTel();
-				String email = rfe.getEmail();*/
-				
 				cntrl.addStrankeData(rfe);
-				
 				tableModelStr.fireTableDataChanged();
 				tableModelStr.setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
 				
-				//dodaje stranku u dropdown listu
 				fPanel.updateStrankeCombo(cntrl.getDataStranke());
-				
-				//setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
-				//refreshTable();
-				
 				
 			}
 		});
 
-			/*@Override
-			public void rightPanelEventOccured(RightFormEvent rfe) {
-
-				int productCat = rfe.getProducrCat();
-				boolean giftCard = rfe.isGiftCard();
-				boolean decorativePack = rfe.isDecorativePack();
-				boolean newLetter = rfe.isNewLetter();
-				String paymentMet = rfe.getPaymentMet();
-				String gcText = rfe.getGcText();
-				String delivery = rfe.getDelivery();
-
-				System.out.println("Kategorija proizvoda: " + productCat);
-				System.out.println("Gift card: " + giftCard);
-				System.out.println("Gift card short text: " + gcText);
-				System.out.println("Decorative package: " + decorativePack);
-				System.out.println("Send me newsletters: " + newLetter);
-				System.out.println("Payment method: " + paymentMet + ", delivery: " + delivery);
-
-			}
-		});*/
-		
-		
-
 	}
 	
+	/**
+	 * Metoda koja osvježava tablice.
+	 */
 	public void refreshTable() {
 		tableModelPon.fireTableDataChanged();
 		tableModelPot.fireTableDataChanged();
 		tableModelStr.fireTableDataChanged();
-		
-		
-		/*for (int i = 0; i < tableModelPon.getRowCount(); i++) {
-            if ((boolean) tableModelPon.getValueAt(i, 7)==false) {
-            	System.out.println((boolean) tableModelPon.getValueAt(i, 7));
-            	tableModelPon.removeRow(i);
-            }
-        }
-		
-		if(tablePon.getColumnModel().getColumnCount()==8) tablePon.removeColumn(tablePon.getColumnModel().getColumn(7));*/
+
 	}
 	
+	/**
+	 * Metoda koja daje podatke tablicama.
+	 * @param stranke ArrayList stranake
+	 * @param nekretnine ArrayList nekretnine
+	 */
 	public void setTableData(List<Stranka> stranke, List<Nekretnina> nekretnine) {
-		tableModelPon.setTableData(stranke, nekretnine);
-		tableModelPot.setTableData(stranke, nekretnine);
+		tableModelPon.setTableData(nekretnine);
+		tableModelPot.setTableData(nekretnine);
 		tableModelStr.setTableData(stranke, nekretnine);
 		
 	}
 	
+	/**
+	 * Metoda koja uèitava podatke iz datoteke u bazu podataka, dodaje i osvježava podatke u tablicama.
+	 */
 	private void initData() {
 		cntrl.readDataFromFile();
 		setTableData(cntrl.getDataStranke(),cntrl.getDataNekretnine());
 		refreshTable();
 	}
 	
+	/**
+	 * Dialog kod brisanja nekretnine tipa ponuda.
+	 */
 	private void showDeletePonudaDialog() {
 		int dialogButton = JOptionPane.YES_NO_OPTION;
 		int dialogResult = JOptionPane.showConfirmDialog(this, "Želiš li obrisati nekretninu?", "Nekretnine",dialogButton);
@@ -424,6 +426,9 @@ public class MainFrame extends JFrame {
 		} 
 	}
 	
+	/**
+	 * Dialog kod brisanja nekretnine tipa potražnja.
+	 */
 	private void showDeletePotraznjaDialog() {
 		int dialogButton = JOptionPane.YES_NO_OPTION;
 		int dialogResult = JOptionPane.showConfirmDialog(this, "Želiš li obrisati nekretninu?", "Nekretnine",dialogButton);
@@ -435,6 +440,9 @@ public class MainFrame extends JFrame {
 		} 
 	}
 	
+	/**
+	 * Dialog kod brisanja stranke.
+	 */
 	private void showDeleteStrankaDialog() {
 		int dialogButton = JOptionPane.YES_NO_OPTION;
 		int dialogResult = JOptionPane.showConfirmDialog(this, "Želiš li obrisati stranku?", "Nekretnine",dialogButton);

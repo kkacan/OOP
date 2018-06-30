@@ -2,6 +2,12 @@ package gui;
 
 import java.util.EventObject;
 
+/**
+ * Klasa koja proširuje EventObject i služi za prijenos podataka sa lijevog panela i dialoga za izmjenu nekretnine.
+ * Sadrži sve parametre nekretnine i njihove getterse i setterse.
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 public class LeftFormEvent extends EventObject {
 	
 	private String vrstaNekretnine;

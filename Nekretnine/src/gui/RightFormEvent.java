@@ -2,6 +2,12 @@ package gui;
 
 import java.util.EventObject;
 
+/**
+ * Klasa koja proširuje EventObject i služi za prijenos podataka sa desnog panela i dialoga za izmjenu stranke.
+ * Sadrži sve parametre stranke i njihove getterse i setterse.
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 public class RightFormEvent extends EventObject {
 	
 	private String ime;

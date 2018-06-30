@@ -17,13 +17,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-import controller.Controller;
 import model.Stranka;
+
+/**
+ * Glavni panel za unos podataka.
+ * @author Kristijan Kaèan
+ * @since lipanj, 2018.
+ */
 
 public class FormPanel extends JPanel {
 
-	//private LeftPanel left;
-	//private RightPanel right;
 	private FormListener formLst;
 	private JButton btnSpremi;
 	
@@ -65,8 +68,6 @@ public class FormPanel extends JPanel {
 	
 	private boolean ponuda=true;
 	
-	
-	
 
 	public FormPanel() {
 
@@ -76,16 +77,16 @@ public class FormPanel extends JPanel {
 		rightPanel();
 		add(left, BorderLayout.WEST);
 		add(right, BorderLayout.CENTER);
-		//add(btnSpremi, BorderLayout.SOUTH);
 		layoutComponentsLeft();
 		layoutComponentsRight();
 		activateLeftForm();
 		activateRightForm();
-		//updateStrankeCombo();
 		
 	}
 
-	
+	/**
+	 * Metoda kojom se kreira suèelje desnog panela.
+	 */
 	private void layoutComponentsRight() {
 		right.setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
@@ -152,7 +153,9 @@ public class FormPanel extends JPanel {
 		right.add(btnSpremiStranku, gbc);
 		
 	}
-
+	/**
+	 * Metoda kojom se kreira suèelje lijevog panela.
+	 */
 	private void layoutComponentsLeft() {
 		
 		left.setLayout(new GridBagLayout());
@@ -244,17 +247,23 @@ public class FormPanel extends JPanel {
 		left.add(btnSpremi, gbc);
 		
 	}
-
+	
+	/**
+	 * Metoda koja postavlja obrub i dimenzije lijevog panela.
+	 */
 	private void leftPanel() {
 
 		Border outer = BorderFactory.createEmptyBorder(5, 5, 5, 5);
-		Border inner = BorderFactory.createTitledBorder("Podaci o nekretnini");
+		Border inner = BorderFactory.createTitledBorder("Nova nekretnina");
 		left.setBorder(BorderFactory.createCompoundBorder(outer, inner));
 		Dimension dim = getPreferredSize();
 		dim.width = 500;
 		left.setPreferredSize(dim);
 	}
 
+	/**
+	 * Metoda koja postavlja obrub i dimenzije desnog panela.
+	 */
 	private void rightPanel() {
 
 		Border outer = BorderFactory.createEmptyBorder(5, 5, 5, 5);
@@ -265,6 +274,9 @@ public class FormPanel extends JPanel {
 		right.setPreferredSize(dim);
 	}
 
+	/**
+	 * Metoda koja postavlja layout i dimenzije panela.
+	 */
 	private void setFormLayout() {
 
 		setLayout(new BorderLayout());
@@ -273,6 +285,9 @@ public class FormPanel extends JPanel {
 		setPreferredSize(dim);
 	}
 
+	/**
+	 * Metoda koja inicijalizira sve elemente panela.
+	 */
 	private void createFormComp() {
 
 				
@@ -332,52 +347,26 @@ public class FormPanel extends JPanel {
 		
 		btnSpremiStranku = new JButton("Spremi stranku");
 		
-		/*btnSpremi.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				//left.actionLeftPerformed();
-				actionRightPerformed();
-				
-
-			}
-		});
-		
-		btnSpremiStranku.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				//actionLeftPerformed();
-				actionRightPerformed();
-				
-				comboModelStranka.addElement(imeField.getText());
-				
-
-			}
-		});*/
-		
-
 	}
 
+	/**
+	 * Metoda koja postavlja FormListener.
+	 * @param listener FormListener
+	 */
 	public void setFormListener(FormListener listener) {
 
 		this.formLst = listener;
-		//left.setLeftFormList(formLst);
-		//right.setRightFormListener(formLst);
-
 	}
 	
+	/**
+	 * Metoda koja postavlja listener na botun lijevog panela.
+	 */
 	private void activateLeftForm() {
 
 		btnSpremi.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
-				
-				
 				
 				String vrsta = (String) vrstaCombo.getSelectedItem();
 				String mjesto = mjestoField.getText();
@@ -416,6 +405,9 @@ public class FormPanel extends JPanel {
 		});
 	}
 	
+	/**
+	 * Metoda koja postavlja listener na botun desnog panela.
+	 */
 	private void activateRightForm() {
 		btnSpremiStranku.addActionListener(new ActionListener() {
 
@@ -451,17 +443,16 @@ public class FormPanel extends JPanel {
 
 				}
 				
-				//updateStrankeCombo();
-				
 				resetRightForm();
-				
 
 			}
 		});
 		
 	}
-
 	
+	/**
+	 * Metoda koja resetira sva polja desnog panela.
+	 */
 	private void resetRightForm() {
 		
 		imeField.setText("");
@@ -471,6 +462,9 @@ public class FormPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Metoda koja resetira sva polja lijevog panela.
+	 */
 	private void resetLeftForm() {
 		
 		vrstaCombo.setSelectedIndex(0);
@@ -480,57 +474,11 @@ public class FormPanel extends JPanel {
 		vrstaPonCombo.setSelectedIndex(0);
 		strankaCombo.setSelectedIndex(0);
 	}
-
-
-	/*private void actionLeftPerformed() {
-		
-		String vrsta = (String) vrstaCombo.getSelectedItem();
-		String mjesto = mjestoField.getText();
-		String ulica = ulicaField.getText();
-		String cijena = cijenaField.getText();
-		String vrstaPon = (String) vrstaPonCombo.getSelectedItem();
-		String imeStranke = (String) strankaCombo.getSelectedItem();
-
-		LeftFormEvent lfe = new LeftFormEvent(this);
-		
-		lfe.setVrstaNekretnine(vrsta);
-		lfe.setMjesto(mjesto);
-		lfe.setUlica(ulica);
-		lfe.setCijena(cijena);
-		lfe.setVrstaPonude(vrstaPon);
-		lfe.setImeStranke(imeStranke);
-
-		if (formLst != null) {
-
-			formLst.leftPanelEventOccured(lfe);
-
-		}
-	}
 	
-	private void actionRightPerformed() {
-		
-		String ime = imeField.getText();
-		String adresa = adresaField.getText();
-		String tel = telField.getText();
-		String email = emailField.getText();
-		
-
-		RightFormEvent rfe = new RightFormEvent(this);
-		
-		rfe.setIme(ime);
-		rfe.setAdresa(adresa);
-		rfe.setTel(tel);
-		rfe.setEmail(email);
-		
-
-		if (formLst != null) {
-
-			formLst.rightPanelEventOccured(rfe);
-
-		}
-	}
-*/
-	
+	/**
+	 * Metoda koja ažurira vrste ponuda u zavisnosti o tipu ponude.
+	 * @param ponuda definira da li je tip ponuda ili potražnja
+	 */
 	public void updateVrstaCombo(boolean ponuda) {
 		
 		this.ponuda=ponuda;
@@ -554,24 +502,38 @@ public class FormPanel extends JPanel {
 		
 	}
 	
+	/**
+	 * Metoda koja ažurira listu stranaka u ComboBoxu.
+	 * @param stranke ArrayList stranke
+	 */
 	public void updateStrankeCombo(List<Stranka> stranke) {
 		
+		comboModelStranka.removeAllElements();
 		for (int i=0; i<stranke.size();i++) {
 			comboModelStranka.addElement(stranke.get(i).getImePrezime());
 		}
 	}
 
-
+	/**
+	 * Metoda koja onemoguæuje spremanje nove nekretnine u zavisnosti od položaja prikaza tablice.
+	 * Ako je prikaz tablice na strankama onda je unos nove nekretnine onemoguæen.
+	 */
 	public void disableSpremiBtn() {
 		
 		btnSpremi.setEnabled(false);
 	}
-	
+	/**
+	 * Metoda koja omoguæuje spremanje nove nekretnine u zavisnosti od položaja prikaza tablice.
+	 * Ako je prikaz tablice na nekretninama onda je unos nove nekretnine omoguæen.
+	 */
 	public void enableSpremiBtn() {
 		
 		btnSpremi.setEnabled(true);
 	}
 	
+	/**
+	 * Metoda koja prikazuje dialog ako nisu uneseni svi potrebni podaci.
+	 */
 	private void showDialog() {
 		
 		int dialogButton = JOptionPane.INFORMATION_MESSAGE;
